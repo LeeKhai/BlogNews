@@ -11,6 +11,15 @@
 |
 */
 
+// Route::get('/admin/{vue?}', function () {
+//     return view('welcome');
+// })->where('vue', '[\/\w\.-]*');
+
+
+Auth::routes();
+
+Route::get('/admin/{vue?}', 'AdminController@index')->where('vue', '[\/\w\.-]*')->name('admin');
+Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
 });
