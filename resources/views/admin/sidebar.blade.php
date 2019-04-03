@@ -90,13 +90,17 @@
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
+            <a href="/admin/categories" style="text-decoration: none;">
+            <span style="color:white">Category</span>
+            </a>
     </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
         <i class="fas fa-fw fa-table"></i>
-        <span style="color:white"><router-link :to="{ name: 'table.list' }">Tables</router-link></span>
+        <a href="/admin" style="text-decoration: none;">
+        <span style="color:white">Table User</span>
+        </a>
     </li>
     <li class="nav-item">
         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

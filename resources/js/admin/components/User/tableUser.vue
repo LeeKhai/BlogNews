@@ -1,5 +1,8 @@
 <template>
   <div class="card shadow mb-4">
+    <div class="url">
+      <span><router-link :to="{ name: 'table.users'}" style="text-decoration: none;">Home</router-link></span>
+    </div>
     <div class="button-create form-group">
       <button class="btn btn-primary" style="margin-left:1300px">
         <router-link :to="{ name: 'create.user'}">
@@ -54,11 +57,11 @@ export default {
     var app = this;
     axios
       .get("/api/v1/users")
-      .then(function(resp) {
-        app.list_users = resp.data;
+      .then(function(response) {
+        app.list_users = response.data;
       })
-      .catch(function(resp) {
-        console.log(resp);
+      .catch(function(response) {
+        console.log(response);
         alert("Could not load Users");
       });
   },
@@ -68,10 +71,10 @@ export default {
         var app = this;
         axios
           .delete("/api/v1/users/" + id)
-          .then(function(resp) {
+          .then(function(response) {
             app.list_users.splice(index, 1);
           })
-          .catch(function(resp) {
+          .catch(function(response) {
             alert("Could not delete User");
           });
       }
@@ -79,3 +82,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.url {
+  color: blue;
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+</style>
