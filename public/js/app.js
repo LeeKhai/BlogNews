@@ -1810,15 +1810,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1834,9 +1825,9 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     axios.get("/api/v1/categories").then(function (response) {
       app.list_categories = response.data;
+      app.getSelectCategory('0', "");
     }).catch(function (response) {
-      console.log(response);
-      alert("Could not load Categories");
+      console.log("Could not load Categories");
     });
   },
   methods: {
@@ -1849,8 +1840,21 @@ __webpack_require__.r(__webpack_exports__);
           path: "/categories"
         });
       }).catch(function (resp) {
-        console.log(resp);
         alert("Could not create your Category");
+      });
+    },
+    getSelectCategory: function getSelectCategory(parent, str) {
+      var app = this;
+      var x = document.getElementById("selectCate");
+      var option;
+      app.list_categories.forEach(function (item) {
+        if (item.id_parent == parent) {
+          option = document.createElement("option");
+          option.text = str + item.name;
+          option.value = item.id;
+          x.add(option);
+          app.getSelectCategory(item.id, str + "--");
+        }
       });
     }
   }
@@ -1914,12 +1918,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1927,7 +1925,8 @@ __webpack_require__.r(__webpack_exports__);
         name: "",
         description: "",
         id_parent: ""
-      }
+      },
+      list_categories: []
     };
   },
   mounted: function mounted() {
@@ -1938,6 +1937,12 @@ __webpack_require__.r(__webpack_exports__);
       app.category = response.data;
     }).catch(function () {
       alert("Could not load your Category");
+    });
+    axios.get("/api/v1/categories").then(function (response) {
+      app.list_categories = response.data;
+      app.getSelectCategory('0', "");
+    }).catch(function (response) {
+      console.log("Could not load Categories");
     });
   },
   created: function created() {},
@@ -1950,6 +1955,20 @@ __webpack_require__.r(__webpack_exports__);
         app.$router.replace("/categories");
       }).catch(function (response) {
         alert("Could not create your Category");
+      });
+    },
+    getSelectCategory: function getSelectCategory(parent, str) {
+      var app = this;
+      var x = document.getElementById("selectCate");
+      var option;
+      app.list_categories.forEach(function (item) {
+        if (item.id_parent == parent) {
+          option = document.createElement("option");
+          option.text = str + item.name;
+          option.value = item.id;
+          x.add(option);
+          app.getSelectCategory(item.id, str + "--");
+        }
       });
     }
   }
@@ -6775,7 +6794,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.url[data-v-45e5b370] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\n#select[data-v-45e5b370] {\r\n    display: block;\r\n    width: 100%;\r\n    height: calc(1.5em + .75rem + 2px);\r\n    padding: .375rem .75rem;\r\n    font-size: 1rem;\r\n    font-weight: 400;\r\n    line-height: 1.5;\r\n    color: #6e707e;\r\n    background-color: #fff;\r\n    background-clip: padding-box;\r\n    border: 1px solid #d1d3e2;\r\n    border-radius: 12px;\n}\r\n", ""]);
+exports.push([module.i, "\n.url[data-v-45e5b370] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\n#selectCate[data-v-45e5b370] {\r\n    display: block;\r\n    width: 100%;\r\n    height: calc(1.5em + .75rem + 2px);\r\n    padding: .375rem .75rem;\r\n    font-size: 1rem;\r\n    font-weight: 400;\r\n    line-height: 1.5;\r\n    color: #6e707e;\r\n    background-color: #fff;\r\n    background-clip: padding-box;\r\n    border: 1px solid #d1d3e2;\r\n    border-radius: 12px;\r\n    margin-top: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -6794,7 +6813,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.url[data-v-0b6d32fe] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\r\n", ""]);
+exports.push([module.i, "\n.url[data-v-0b6d32fe] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\n#selectCate[data-v-0b6d32fe] {\r\n    display: block;\r\n    width: 100%;\r\n    height: calc(1.5em + .75rem + 2px);\r\n    padding: .375rem .75rem;\r\n    font-size: 1rem;\r\n    font-weight: 400;\r\n    line-height: 1.5;\r\n    color: #6e707e;\r\n    background-color: #fff;\r\n    background-clip: padding-box;\r\n    border: 1px solid #d1d3e2;\r\n    border-radius: 12px;\r\n    margin-top: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -38389,8 +38408,9 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
-                    _c("input", {
+                  _c(
+                    "select",
+                    {
                       directives: [
                         {
                           name: "model",
@@ -38399,29 +38419,33 @@ var render = function() {
                           expression: "category.id_parent"
                         }
                       ],
-                      staticClass: "form-control form-control-user",
-                      attrs: {
-                        type: "number",
-                        id: "exampleInputPassword",
-                        placeholder: "id Parent"
-                      },
-                      domProps: { value: _vm.category.id_parent },
+                      attrs: { id: "selectCate", name: "sltParent" },
                       on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
                           _vm.$set(
                             _vm.category,
                             "id_parent",
-                            $event.target.value
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
                           )
                         }
                       }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(1)
+                    },
+                    [
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("Choose Category Default")
+                      ])
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
                 _c(
@@ -38448,16 +38472,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "text-center" }, [
       _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
         _vm._v("Create Category")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("select", { attrs: { id: "select", name: "sltParent" } }, [
-      _c("option", { attrs: { value: "0" } }, [
-        _vm._v("Please Choose Category")
       ])
     ])
   }
@@ -38609,8 +38623,9 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
-                    _c("input", {
+                  _c(
+                    "select",
+                    {
                       directives: [
                         {
                           name: "model",
@@ -38619,27 +38634,33 @@ var render = function() {
                           expression: "category.id_parent"
                         }
                       ],
-                      staticClass: "form-control form-control-user",
-                      attrs: {
-                        type: "number",
-                        id: "exampleInputPassword",
-                        placeholder: "id Parent"
-                      },
-                      domProps: { value: _vm.category.id_parent },
+                      attrs: { id: "selectCate", name: "sltParent" },
                       on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
                           _vm.$set(
                             _vm.category,
                             "id_parent",
-                            $event.target.value
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
                           )
                         }
                       }
-                    })
-                  ])
+                    },
+                    [
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("Choose Category Default")
+                      ])
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
                 _c(

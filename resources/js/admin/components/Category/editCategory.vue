@@ -32,15 +32,9 @@
                     v-model="category.description"
                   >
                 </div>
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input
-                    type="number"
-                    class="form-control form-control-user"
-                    id="exampleInputPassword"
-                    placeholder="id Parent"
-                    v-model="category.id_parent"
-                  >
-                </div>
+                 <select id="selectCate" name="sltParent" v-model="category.id_parent">
+                  <option value="0">Choose Category Default</option>
+                </select>
               </div>
               <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
             </form>
@@ -52,7 +46,6 @@
 </template>
 
 <script>
-
 export default {
    data() {
     return {
@@ -60,7 +53,8 @@ export default {
         name: "",
         description: "",
         id_parent: ""
-      }
+      },
+      list_categories: [],
     };
   },
   mounted() {
@@ -75,6 +69,15 @@ export default {
       .catch(function() {
         alert("Could not load your Category");
       });
+    axios
+      .get("/api/v1/categories")
+      .then(function(response) {
+        app.list_categories = response.data;  
+        app.getSelectCategory('0',"");     
+      })
+      .catch(function(response) {
+        console.log("Could not load Categories");
+      });  
   },
   created() {},
   methods: {
@@ -90,6 +93,20 @@ export default {
         .catch(function(response) {
           alert("Could not create your Category");
         });
+    },
+    getSelectCategory(parent, str){
+      var app = this;
+      var x = document.getElementById("selectCate");
+      var option;
+      app.list_categories.forEach(function(item){
+        if(item.id_parent == parent){
+          option = document.createElement("option");
+          option.text = str + item.name;
+          option.value = item.id;
+          x.add(option);
+          app.getSelectCategory(item.id,str+"--");
+        }
+      }); 
     }
   }
 };
@@ -102,5 +119,20 @@ export default {
   font-weight: bold;
   margin-left: 10px;
   margin-top: 10px;
+}
+#selectCate {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6e707e;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d1d3e2;
+    border-radius: 12px;
+    margin-top: 15px;
 }
 </style>
