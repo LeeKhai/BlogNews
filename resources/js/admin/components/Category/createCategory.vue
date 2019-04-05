@@ -32,8 +32,8 @@
                     v-model="category.description"
                   >
                 </div>
-                <select id="selectCate" name="sltParent" v-model="category.id_parent">
-                  <option value="0">Choose Category Default</option>
+                <select id="selectCate" name="sltParent" v-model="category.parent_id">
+                  <option value="0" selected>Choose Category Default</option>
                 </select>
               </div>
               <button class="btn btn-primary btn-user btn-block" style="submit">Create</button>
@@ -79,7 +79,7 @@ export default {
         .then(function(response) {
           app.$router.push({ path: "/categories" });
         })
-        .catch(function(resp) {
+        .catch(function(response) {
           alert("Could not create your Category");
         });
     },
@@ -88,7 +88,7 @@ export default {
       var x = document.getElementById("selectCate");
       var option;
       app.list_categories.forEach(function(item){
-        if(item.id_parent == parent){
+        if(item.parent_id == parent){
           option = document.createElement("option");
           option.text = str + item.name;
           option.value = item.id;

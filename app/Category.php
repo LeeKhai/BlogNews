@@ -3,6 +3,8 @@
 namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use App\News;
+
 
 class Category extends Model
 {
@@ -14,6 +16,10 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'id_parent', 'description',
+        'name', 'parent_id', 'description',
     ];
+
+    public function news() {
+        return $this->hasMany(News::class, 'category_id', 'id');
+    }
 }

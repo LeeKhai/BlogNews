@@ -99,7 +99,7 @@ export default {
       var x = document.getElementById("selectCate");
       var option;
       app.list_categories.forEach(function(item){
-        if(item.id_parent == parent){
+        if(item.parent_id == parent){
           option = document.createElement("option");
           option.text = str + item.name;
           option.value = item.id;

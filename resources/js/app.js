@@ -15,8 +15,14 @@ import EditUser from './admin/components/User/editUser'
 import CreateUser from './admin/components/User/createUser'
 
 import TableCategories from './admin/components/Category/tableCategory'
-import Editcategory from './admin/components/Category/editCategory'
+import EditCategory from './admin/components/Category/editCategory'
 import CreateCategory from './admin/components/Category/createCategory'
+
+import TableNews from './admin/components/News/tableNews'
+import EditNews from './admin/components/News/editNews'
+import CreateNews from './admin/components/News/createNews'
+
+import Test from './admin/components/News/test'
 
 const router = new VueRouter({
     base: '/admin',
@@ -50,7 +56,27 @@ const router = new VueRouter({
         {
             path: '/category/edit',
             name: 'edit.category',
-            component: Editcategory,
+            component: EditCategory,
+        },
+        {
+            path: '/news',
+            name: 'table.news',
+            component: TableNews,
+        },
+        {
+            path: '/news/edit',
+            name: 'edit.news',
+            component: EditNews,
+        },
+        {
+            path: '/news/create',
+            name: 'create.news',
+            component: CreateNews,
+        },
+        {
+            path: '/test',
+            name: 'test.test',
+            component: Test,
         },
     ],
 });
