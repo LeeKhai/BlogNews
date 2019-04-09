@@ -9,7 +9,17 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 Vue.use(VueAxios, axios);
 
+import _ from "lodash";
+import SortedTablePlugin from "vue-sorted-table";
 
+Vue.prototype.$_ = _;
+Vue.use(SortedTablePlugin);
+Vue.config.productionTip = false;
+
+import CKEditor from '@ckeditor/ckeditor5-vue';
+Vue.use(CKEditor);
+
+import Profile from './admin/components/User/proFile'
 import TableUser from './admin/components/User/tableUser'
 import EditUser from './admin/components/User/editUser'
 import CreateUser from './admin/components/User/createUser'
@@ -32,6 +42,11 @@ const router = new VueRouter({
             path: '/',
             name: 'table.users',
             component: TableUser,
+        },
+        {
+            path: '/profile',
+            name: 'profile.user',
+            component: Profile,
         },
         {
             path: '/edit',

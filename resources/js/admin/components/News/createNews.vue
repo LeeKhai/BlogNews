@@ -19,7 +19,7 @@
             <div class="text-center">
               <h1 class="h4 text-gray-900 mb-4">Create News</h1>
             </div>
-            <form class="user" enctype="multipart/form-data" v-on:submit="saveForm()">
+            <form class="user" v-on:submit="saveForm()">
               <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
                   <input
@@ -38,28 +38,26 @@
                   v-model="news.description"
                 >
               </div>
-              <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control form-control-user"
-                  placeholder="Content"
-                  v-model="news.content"
-                >
+              <div style="margin-bottom:30px;">
+                <ckeditor :editor="editor" v-model="news.content" :config="editorConfig"></ckeditor>
               </div>
-              <input type="text" value="1" style="display:hidden" v-model="news.user_id">
-              <input type="text" value="" style="display:hidden" v-model="news.picture">
-              <div class="card-body">
-                <div class="row">
-                  <!-- <div class="col-md-3" v-if="image">
-                    <img :src="image" class="img-responsive" height="70" width="90">
-                  </div> -->
-                  <div class="col-md-6">
-                    <input type="file" v-on:change="onImageChange" class="form-control" >
-                  </div>
+                <div v-if="news.picture">
+                  <img :src="news.picture" class="img-responsive" height="105" width="115">
                 </div>
-              </div>
-              <select id="selectCate" name="sltParent" v-model="news.category_id"></select>
+                <div style="width:400px;">
+                  <input
+                    type="file"
+                    v-on:change="onImageChange"
+                    id="picture"
+                    class="form-control"
+                  >
+           </div>
+          <div>
+              <select id="selectCate" name="sltParent" v-model="news.category_id" style="width:400px;"></select>
+          </div>
+          <div style="margin-top:25px; margin-left:300px;width:300px;">
               <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+          </div>
             </form>
           </div>
         </div>
@@ -69,15 +67,18 @@
 </template>
 
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
+      editor: ClassicEditor,
+      editorConfig: {
+      },
       news: {
         name: "",
         content: "",
         description: "",
         category_id: "",
-        user_id: "",
         picture: "",
       }
     };
@@ -98,7 +99,6 @@ export default {
     saveForm() {
       event.preventDefault();
       var app = this;
-      // app.news.picture = this.picture;
       var newNews = app.news;
       axios
         .post("/api/v1/news", newNews)
@@ -133,7 +133,7 @@ export default {
       let reader = new FileReader();
       let vm = this;
       reader.onload = e => {
-        vm.picture = e.target.result;
+        vm.news.picture = e.target.result;
       };
       reader.readAsDataURL(file);
     },

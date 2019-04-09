@@ -39,18 +39,35 @@
                 >
               </div>
               <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control form-control-user"
-                  placeholder="Content"
-                  v-model="news.conntent"
+                <ckeditor :editor="editor" v-model="news.content" :config="editorConfig"></ckeditor>
+              </div>
+              <div style="width:100px; height:120px;" v-if="news.picture">
+                <label>Picture Old :</label>
+                <img
+                  v-bind:src="pathImage(news.picture)"
+                  class="img-responsive"
+                  height="90"
+                  width="115"
                 >
               </div>
-              <input type="text" value="1" style="display:hidden" v-model="news.user_id">
-              <input type="text" value="1" style="display:hidden" v-model="news.picture">
-              <select id="selectCate" name="sltParent" v-model="news.category_id">
-              </select>
-              <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+              <div style="width:100px; height:120px;" v-if="pictureNews!=''">
+                <label>Picture New :</label>
+                <img :src="pictureNews" class="img-responsive" height="85" width="115">
+              </div>
+              <div style="width:400px;">
+                <input type="file" v-on:change="onImageChange" id="picture" class="form-control">
+              </div>
+              <div>
+                <select
+                  id="selectCate"
+                  name="sltParent"
+                  v-model="news.category_id"
+                  style="width:400px;"
+                ></select>
+              </div>
+              <div style="margin-top:25px; margin-left:300px;width:300px;">
+                <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+              </div>
             </form>
           </div>
         </div>
@@ -60,17 +77,20 @@
 </template>
 
 <script>
-import axios from "axios";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
+      editor: ClassicEditor,
+      editorConfig: {},
+      pictureNews: "",
       news: {
         name: "",
         content: "",
         description: "",
         category_id: "",
         user_id: "",
-        picture:"",
+        picture: ""
       }
     };
   },
@@ -93,6 +113,7 @@ export default {
       event.preventDefault();
       var app = this;
       var updateNews = app.news;
+      updateNews.picture = app.pictureNews;
       axios
         .patch("/api/v1/news/" + app.newsId, updateNews)
         .then(function(response) {
@@ -107,26 +128,42 @@ export default {
       axios
         .get("/api/v1/categories")
         .then(function(response) {
-          app.list_categories = response.data;  
-          app.getSelectCategory('0',"");     
+          app.list_categories = response.data;
+          app.getSelectCategory("0", "");
         })
         .catch(function(response) {
           console.log("Could not load Categories");
         });
     },
-    getSelectCategory(parent, str){
+    getSelectCategory(parent, str) {
       var app = this;
       var x = document.getElementById("selectCate");
       var option;
-      app.list_categories.forEach(function(item){
-        if(item.parent_id == parent){
+      app.list_categories.forEach(function(item) {
+        if (item.parent_id == parent) {
           option = document.createElement("option");
           option.text = str + item.name;
           option.value = item.id;
           x.add(option);
-          app.getSelectCategory(item.id, str+"--");
+          app.getSelectCategory(item.id, str + "--");
         }
-      }); 
+      });
+    },
+    onImageChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = e => {
+        vm.pictureNews = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    pathImage(filename) {
+      return "/images/" + filename;
     }
   }
 };
@@ -141,18 +178,18 @@ export default {
   margin-top: 10px;
 }
 #selectCate {
-    display: block;
-    width: 100%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #6e707e;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #d1d3e2;
-    border-radius: 12px;
-    margin-top: 15px;
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6e707e;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #d1d3e2;
+  border-radius: 12px;
+  margin-top: 15px;
 }
 </style>

@@ -36,7 +36,9 @@
                   <option value="0">Choose Category Default</option>
                 </select>
               </div>
-              <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+              <div style="margin-top:25px; margin-left:300px;width:300px;">
+                  <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+              </div>
             </form>
           </div>
         </div>

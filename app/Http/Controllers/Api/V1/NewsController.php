@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\News;
 use Carbon\Carbon;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class NewsController extends Controller
 {
@@ -17,7 +18,12 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return News::all();
+        $newsblog = News::all();
+        foreach ($newsblog as $news) {
+            if ($c = preg_match_all("/(public\/images\/)/is", $news->picture, $matches))
+                $news->picture = Storage::url($news->picture);
+        }
+        return $newsblog;
     }
 
     /**
@@ -38,49 +44,21 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        
-        // $imageData = $request->get('picture');
-       // $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+        $picture = $request->get('picture');
+        $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
 
-        // Image::make($request-get('picture'))->save(public_path('images/'));
+        Image::make($request->get('picture'))->save(public_path('images/') . $fileName);
 
-        // $imageName = time().'.'.$request->picture->getClientOriginalExtension();
-
-        // $request->picture->move(public_path('images'), $imageName);
-
-
-        // $imageName = time().'.'.$request->image->getClientOriginalExtension();
-        // $request->image->move(public_path('images'), $imageName);
-        // return 'ok';
-        // News::create([
-        //     'name'               => $request->input('name'),
-        //     'description'        => $request->input('description'),
-        //     'user_id'            => $request->input('user_id'),
-        //     'category_id'        => $request->input('category_id'),
-        //     'content'            => $request->input('content'),
-        //     // 'picture'            => $request->picture
-        // ]);
-
-        // return response([
-        //     'result' => 'success'
-        // ], 200);
-
-        $news = News::create($request->all());
-
-        // News::create([
-        //     'name'               => $request->input('name'),
-        //     'description'        => $request->input('description'),
-        //     'user_id'            => $request->input('user_id'),
-        //     'category_id'        => $request->input('category_id'),
-        //     'content'            => $request->input('content'),
-        //     'picture'            => 'aabcbcbcbcbc'
-        // ]);
-        // return response([
-        //     'result' => 'success'
-        // ], 200);
-        return news;
-        // $news->picture = $imageName;
-     
+        News::create([
+            'name'            => $request->input('name'),
+            'description'     => $request->input('description'),
+           // 'user_id'         => Auth::user()->id,
+            'user_id'         => 1,
+            'category_id'     => $request->input('category_id'),
+            'content'         => $request->input('content'),
+            'picture'         => $fileName,
+        ]);
+        return '';
     }
 
     /**
@@ -114,9 +92,22 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $picture = $request->get('picture');
+        $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
+
+        Image::make($request->get('picture'))->save(public_path('images/') . $fileName);
+
         $news = News::findOrFail($id);
-        $news->update($request->all());
-        return '';
+    
+        $news->name = $request->input('name');
+        $news->description = $request->input('description');
+        $news->category_id = $request->input('category_id');
+        $news->content = $request->input('content');
+        $news->picture = $fileName;
+        $news->save();
+        return response([
+            'result' => 'success'
+        ], 200);
     }
 
     /**

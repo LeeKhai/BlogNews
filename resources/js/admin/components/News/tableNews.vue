@@ -1,8 +1,12 @@
 <template>
   <div class="card shadow mb-4">
     <div class="url">
-      <span><router-link :to="{ name: 'table.users'}" style="text-decoration: none;">Home >></router-link></span>
-      <span><router-link :to="{ name: 'table.news'}" style="text-decoration: none;">News</router-link></span>
+      <span>
+        <router-link :to="{ name: 'table.users'}" style="text-decoration: none;">Home >></router-link>
+      </span>
+      <span>
+        <router-link :to="{ name: 'table.news'}" style="text-decoration: none;">News</router-link>
+      </span>
     </div>
     <div class="button-create form-group">
       <button class="btn btn-primary" style="margin-left:1300px">
@@ -21,6 +25,7 @@
             <tr>
               <th>id</th>
               <th>Name</th>
+              <th>Picture</th>
               <th>Description</th>
               <th>Category</th>
               <th>Action</th>
@@ -30,6 +35,14 @@
             <tr v-for="(news, index) in list_news">
               <th>{{ news.id }}</th>
               <th>{{ news.name }}</th>
+              <th>
+                <img
+                  v-bind:src="pathImage(news.picture)"
+                  alt
+                  class="img-responsive"
+                  style="with:75px; height:105px;"
+                >
+              </th>
               <th>{{ news.description }}</th>
               <th>{{ news.category_id }}</th>
               <th>
@@ -76,9 +89,12 @@ export default {
             app.list_news.splice(index, 1);
           })
           .catch(function(response) {
-            alert("Could not delete User");
+            alert("Could not delete News");
           });
       }
+    },
+    pathImage(filename) {
+      return "/images/" + filename;
     }
   }
 };

@@ -23,3 +23,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/getCurrentUser', function() {
+    return Auth::user()->load('roles');
+ });

@@ -63,7 +63,7 @@ export default {
         app.user = resp.data;
       })
       .catch(function() {
-        alert("Could not load your company");
+        alert("Could not load your User");
       });
   },
   created() {},
