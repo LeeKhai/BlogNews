@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\News;
+use App\Policies\NewsPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,8 +15,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Model' => 'App\Policies\ModelPolicy',
     ];
+
 
     /**
      * Register any authentication / authorization services.
@@ -27,5 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('actions-user', function (){
             return false;
         });
+        Gate::resource('news', NewsPolicy::class);
+        Gate::define('news.publish', NewsPolicy::class . '@publish');
+        Gate::define('news.draft', NewsPolicy::class . '@draft');
     }
 }

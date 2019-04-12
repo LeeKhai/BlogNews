@@ -13,7 +13,7 @@
       </button>
     </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Table Users</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Edit Users</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -22,6 +22,7 @@
             <tr>
               <th>id</th>
               <th>Name</th>
+              <th>Avatar</th>
               <th>Email</th>
               <th>Role</th>
               <th v-if="checkIsAdmin">Action</th>
@@ -34,6 +35,13 @@
               </th>
               <th>
                 <router-link :to="{ name: 'profile.user', params: {id: user.id}}">{{ user.name }}</router-link>
+              </th>
+              <th>
+                <img
+                  v-bind:src="pathImage(user.picture)"
+                  class="img-profile rounded-circle"
+                  style="with:70px; height:70px; margin-left:50px;"
+                >
               </th>
               <th>{{ user.email }}</th>
               <td>
@@ -84,7 +92,7 @@ export default {
       if (this.currentUser.roles) {
         let check = false;
         this.currentUser.roles.forEach(role => {
-          if (role.name === "admin") {
+          if (role.slug === "admin") {
             check = true;
           }
         });
@@ -115,6 +123,9 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    pathImage(filename) {
+      return "/avatars/" + filename;
     }
   }
 };

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\News;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
+use App\Category;
 
 class NewsController extends Controller
 {
@@ -18,11 +19,10 @@ class NewsController extends Controller
      */
     public function index()
     {
+        // $news = News::find(1);
+        // $post = $news->category;
+        // dd($post);
         $newsblog = News::all();
-        foreach ($newsblog as $news) {
-            if ($c = preg_match_all("/(public\/images\/)/is", $news->picture, $matches))
-                $news->picture = Storage::url($news->picture);
-        }
         return $newsblog;
     }
 
@@ -52,7 +52,8 @@ class NewsController extends Controller
         News::create([
             'name'            => $request->input('name'),
             'description'     => $request->input('description'),
-           // 'user_id'         => Auth::user()->id,
+            'slug'            => $request->input('slug'),
+            // 'user_id'         => Auth::user()->id,
             'user_id'         => 1,
             'category_id'     => $request->input('category_id'),
             'content'         => $request->input('content'),
@@ -70,6 +71,14 @@ class NewsController extends Controller
     public function show($id)
     {
         return News::findOrFail($id);
+        // $news = News::with('category')->with('user')->find($id);
+        // return $news;
+    }
+
+    public function showNews($slug)
+    {
+        $news = News::where('slug', $slug);
+        return view('welcome.home.single', compact('news'));
     }
 
     /**
@@ -94,13 +103,12 @@ class NewsController extends Controller
     {
         $picture = $request->get('picture');
         $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
-
         Image::make($request->get('picture'))->save(public_path('images/') . $fileName);
-
+        
         $news = News::findOrFail($id);
-    
         $news->name = $request->input('name');
         $news->description = $request->input('description');
+        $news->slug = $request->input('slug');
         $news->category_id = $request->input('category_id');
         $news->content = $request->input('content');
         $news->picture = $fileName;

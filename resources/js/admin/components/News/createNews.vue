@@ -22,6 +22,7 @@
             <form class="user" v-on:submit="saveForm()">
               <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label>Name :</label>
                   <input
                     type="text"
                     class="form-control form-control-user"
@@ -31,6 +32,7 @@
                 </div>
               </div>
               <div class="form-group">
+                <label>Description :</label>
                 <input
                   type="text"
                   class="form-control form-control-user"
@@ -38,26 +40,41 @@
                   v-model="news.description"
                 >
               </div>
+              <div class="form-group">
+                <label>Slug :</label>
+                <input
+                  type="text"
+                  class="form-control form-control-user"
+                  placeholder="input Slug News"
+                  v-model="news.slug"
+                >
+              </div>
               <div style="margin-bottom:30px;">
+                <label>Content :</label>
                 <ckeditor :editor="editor" v-model="news.content" :config="editorConfig"></ckeditor>
               </div>
-                <div v-if="news.picture">
-                  <img :src="news.picture" class="img-responsive" height="105" width="115">
-                </div>
-                <div style="width:400px;">
-                  <input
-                    type="file"
-                    v-on:change="onImageChange"
-                    id="picture"
-                    class="form-control"
-                  >
-           </div>
-          <div>
-              <select id="selectCate" name="sltParent" v-model="news.category_id" style="width:400px;"></select>
-          </div>
-          <div style="margin-top:25px; margin-left:300px;width:300px;">
-              <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
-          </div>
+              <div v-if="news.picture">
+                <img :src="news.picture" class="img-responsive" height="105" width="115">
+              </div>
+                <input type="file" v-on:change="onImageChange">
+              <div>
+                <label>Category :</label>
+                <select
+                  id="selectCate"
+                  name="sltParent"
+                  v-model="news.category_id"
+                  style="width:400px;"
+                ></select>
+              </div>
+              <!-- <div>
+              <label>Tags :</label>
+                <v-select :options="options"></v-select>
+                <input type="text" value="Amsterdam,Washington" data-role="tagsinput">
+                <input data-role="tagsinput" type="text" name="tags" >
+              </div> -->
+              <div style="margin-top:25px; margin-left:300px;width:300px;">
+                <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
+              </div>
             </form>
           </div>
         </div>
@@ -68,19 +85,28 @@
 
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+//import selectvue from "./select";
 export default {
+  // components: {
+  //   "v-select": selectvue,
+  // },
   data() {
     return {
       editor: ClassicEditor,
-      editorConfig: {
-      },
+      editorConfig: {},
       news: {
         name: "",
         content: "",
         description: "",
         category_id: "",
         picture: "",
-      }
+        slug: "",
+      },
+      options: [
+      'foo',
+      'bar',
+      'baz'
+    ]
     };
   },
   mounted() {
@@ -104,7 +130,6 @@ export default {
         .post("/api/v1/news", newNews)
         .then(function(response) {
           app.$router.push({ path: "/news" });
-          
         })
         .catch(function(response) {
           alert("Could not create your News");
@@ -136,7 +161,7 @@ export default {
         vm.news.picture = e.target.result;
       };
       reader.readAsDataURL(file);
-    },
+    }
   }
 };
 </script>

@@ -32,8 +32,6 @@ import TableNews from './admin/components/News/tableNews'
 import EditNews from './admin/components/News/editNews'
 import CreateNews from './admin/components/News/createNews'
 
-import Test from './admin/components/News/test'
-
 const router = new VueRouter({
     base: '/admin',
     mode: 'history',
@@ -87,11 +85,6 @@ const router = new VueRouter({
             path: '/news/create',
             name: 'create.news',
             component: CreateNews,
-        },
-        {
-            path: '/test',
-            name: 'test.test',
-            component: Test,
         },
     ],
 });

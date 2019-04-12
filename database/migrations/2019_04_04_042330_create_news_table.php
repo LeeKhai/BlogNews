@@ -21,11 +21,12 @@ class CreateNewsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('count_views')->default(0);
             $table->bigInteger('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            //$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->text('content');
             $table->string('picture');
+            $table->string('slug')->unique();
             $table->boolean('status')->default(false);
-            $table->boolean('publish')->default(false);
+            $table->boolean('published')->default(false);
             $table->timestamps();
         });
     }

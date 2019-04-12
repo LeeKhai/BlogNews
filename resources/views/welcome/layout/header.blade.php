@@ -1,5 +1,9 @@
 
-    <!-- Header Section -->
+<?php
+	use App\Category;
+	$categories = Category::select('id','name','parent_id')->get();
+ ?>
+	<!-- Header Section -->
 	<header>
 	    <div class="container">
 	     	<div class="top_ber">
@@ -13,8 +17,8 @@
 		    			<div class="top_ber_right">
 		    				<div class="top-menu">
 		    					<ul class="nav navbar-nav">    
-			                        <li><a href="#">Login</a></li>
-			                        <li><a href="#">Register</a></li>
+			                        <li><a href="/login">Login</a></li>
+			                        <li><a href="/register">Register</a></li>
 	                    		</ul>
 		    				</div><!--top-menu-->
 		    			</div><!--top_ber_left-->
@@ -26,13 +30,13 @@
 				<div class="row">
 		    	 	<div class="col-md-3">
 						<div class="logo">
-						<a  href="index.html"><img class="img-responsive" src="{{asset('welcome/img/logo.png')}}" alt=""></a>
+						<a  href="/"><img class="img-responsive" src="{{asset('welcome/img/logo.png')}}" alt=""></a>
 						</div><!--logo-->
 		    	 	</div><!--col-md-3-->
 		    	 	
 		    	 	<div class="col-md-6">
 						<div class="header_ad_banner">
-						<a  href="#"><img class="img-responsive" src="{{asset('welcome/img/img_ad.jpg')}}" alt=""></a>
+						<a  href="/"><img class="img-responsive" src="{{asset('welcome/img/img_ad.jpg')}}" alt=""></a>
 						</div>
 		    	 	</div><!--col-md-6-->
 		    	 	
@@ -66,24 +70,20 @@
 				<div id="navbar" class="collapse navbar-collapse sidebar-offcanvas">
 				<ul class="nav navbar-nav">
 					<li class="hidden"><a href="#page-top"></a></li>
-					<li><a class="page-scroll" href="category.html">Baseball</a></li>
-					<li><a class="page-scroll" href="category.html">Football</a></li>
-					<li><a class="page-scroll" href="category.html">Hockey</a></li>
-					<li><a class="page-scroll" href="category.html">Basketball</a></li>
-					<li><a class="page-scroll" href="category.html">Boxing</a></li>
-					<li><a class="page-scroll" href="category.html">Golf</a></li>
-					<li><a class="page-scroll" href="category.html">Tennis</a></li>
-					<li><a class="page-scroll" href="category.html">Horse racing</a></li>
-					<li><a class="page-scroll" href="category.html">Track & Field</a></li>
-
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-						</ul>
-					</li>
+					@foreach($categories as $category_parent)
+						@if ($category_parent->parent_id === 0)					
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ $category_parent->name }}<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+							@foreach($categories as $category)
+								@if ($category->parent_id === $category_parent->id)
+								<li><a href="#">{{ $category->name }}</a></li>
+								@endif
+							@endforeach									
+							</ul>
+						</li>
+						@endif
+					@endforeach					
 				</ul>
 				<div class="pull-right">
 					<form class="navbar-form" role="search">

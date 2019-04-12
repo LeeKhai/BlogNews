@@ -1,9 +1,13 @@
 <?php
-
 namespace App\Http\Controllers\Api\V1;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+
 use App\User;
+use App\Role;
+use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -24,9 +28,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        
-    }
+    { }
 
     /**
      * Store a newly created resource in storage.
@@ -36,8 +38,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->all());
-        return $user;
+        $picture = $request->get('picture');
+        $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
+        Image::make($request->get('picture'))->save(public_path('avatars/') . $fileName);
+        $user = User::create([
+            'name'            => $request->input('name'),
+            'email'           => $request->input('email'),
+            'password'        => bcrypt($request->input('password')),
+            'picture'         => $fileName,
+        ]);
+        $name_role = $request->get('role');
+        $user
+            ->roles()
+            ->attach(Role::where('id', $name_role)->first());
+        return '';
     }
 
     /**
@@ -71,9 +85,25 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->update($request->all());
-        return $user;
+        if (!Gate::allows('actions-user')) {
+            $user = User::findOrFail($id);
+            $picture = $request->get('picture');
+            if ($picture != '') {
+                $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
+                Image::make($request->get('picture'))->save(public_path('avatars/') . $fileName);
+                $user->picture = $fileName;
+            }
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->save();
+            return response([
+                'result' => 'success'
+            ], 200);
+        } else {
+            return response([
+                'result' => 'error'
+            ], 404);
+        }
     }
 
     /**

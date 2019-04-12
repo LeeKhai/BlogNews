@@ -15,6 +15,7 @@
             <form class="user" v-on:submit="saveForm()">
               <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label>Name :</label>
                   <input
                     type="text"
                     class="form-control form-control-user"
@@ -24,6 +25,7 @@
                   >
                 </div>
                 <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label>Description :</label>
                   <input
                     type="text"
                     class="form-control form-control-user"
@@ -32,6 +34,7 @@
                     v-model="category.description"
                   >
                 </div>
+                <label>Choose Category :</label>
                 <select id="selectCate" name="sltParent" v-model="category.parent_id">
                   <option value="0" selected>Choose Category Default</option>
                 </select>

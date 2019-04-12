@@ -22,6 +22,7 @@
             <form class="user" v-on:submit="saveForm()">
               <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label>Name :</label>
                   <input
                     type="text"
                     class="form-control form-control-user"
@@ -31,6 +32,7 @@
                 </div>
               </div>
               <div class="form-group">
+                <label>Description :</label>
                 <input
                   type="text"
                   class="form-control form-control-user"
@@ -39,6 +41,16 @@
                 >
               </div>
               <div class="form-group">
+                <label>Slug :</label>
+                <input
+                  type="text"
+                  class="form-control form-control-user"
+                  placeholder="input Slug News"
+                  v-model="news.slug"
+                >
+              </div>
+              <div class="form-group">
+                <label>Content :</label>
                 <ckeditor :editor="editor" v-model="news.content" :config="editorConfig"></ckeditor>
               </div>
               <div style="width:100px; height:120px;" v-if="news.picture">
@@ -58,6 +70,7 @@
                 <input type="file" v-on:change="onImageChange" id="picture" class="form-control">
               </div>
               <div>
+                <label>Category :</label>
                 <select
                   id="selectCate"
                   name="sltParent"
@@ -90,7 +103,8 @@ export default {
         description: "",
         category_id: "",
         user_id: "",
-        picture: ""
+        picture: "",
+        slug: "",
       }
     };
   },
@@ -105,7 +119,7 @@ export default {
         app.getCate();
       })
       .catch(function() {
-        alert("Could not load your company");
+        alert("Could not load your News");
       });
   },
   methods: {
@@ -120,7 +134,7 @@ export default {
           app.$router.replace("/news");
         })
         .catch(function(response) {
-          alert("Could not create your User");
+          alert("Could not edit your News");
         });
     },
     getCate() {

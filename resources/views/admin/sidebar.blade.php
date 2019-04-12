@@ -27,7 +27,7 @@
     <li style="margin-left:15px; font-size:20px; margin-bottom:20px;" class="nav-item active">
         <i class="fab fa-accusoft"></i>
         <a href="/admin/news" style="text-decoration: none;">
-        <span style="color:white">Table News</span>
+        <span style="color:white">News</span>
         </a>
     </li>
     <li style="font-size:20px; margin-bottom:20px; text-decoration: none;">

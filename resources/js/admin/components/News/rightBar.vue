@@ -9,7 +9,6 @@
           <a href="#2" data-toggle="tab">Populer</a>
         </li>
       </ul>
-
       <div class="tab-content">
         <div class="tab-pane active" id="1">
           <div class="media">
@@ -322,6 +321,7 @@
 
 <script>
 export default {
+  name: "rightBar",
   methods: {
     pathImage(filename) {
       return "welcome/img/" + filename;

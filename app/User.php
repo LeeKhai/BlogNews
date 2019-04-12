@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Role;
+use App\News;
+
 
 class User extends Authenticatable
 {
@@ -43,23 +45,27 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
    
-    public function authorizeRoles($roles)
+    public function hasAccess(array $permissions) : bool
     {
-        if (is_array($roles)) {
-            return $this->hasAnyRole($roles) ||
-            abort(401, 'This action is unauthorized.');
+        // check if the permission is available in any role
+        foreach ($this->roles as $role) {
+            if($role->hasAccess($permissions)) {
+                return true;
+            }
         }
-        return $this->hasRole($roles) ||
-            abort(401, 'This action is unauthorized.');
+        return false;
     }
 
-    public function hasAnyRole($roles)
+    /**
+     * Checks if the user belongs to role.
+     */
+    public function inRole(string $roleSlug)
     {
-        return null !== $this->roles()->whereIn('name', $roles)->first();
+        return $this->roles()->where('slug', $roleSlug)->count() == 1;
     }
 
-    public function hasRole($role)
+    public function news()
     {
-        return null !== $this->roles()->where('name', $role)->first();
+        return $this->hasMany(News::class);
     }
 }
