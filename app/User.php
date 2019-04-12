@@ -9,6 +9,7 @@ use App\Role;
 use App\News;
 
 
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -44,12 +45,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
-   
-    public function hasAccess(array $permissions) : bool
+
+    public function hasAccess(array $permissions): bool
     {
         // check if the permission is available in any role
         foreach ($this->roles as $role) {
-            if($role->hasAccess($permissions)) {
+            if ($role->hasAccess($permissions)) {
                 return true;
             }
         }
@@ -68,4 +69,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(News::class);
     }
+
+   
 }

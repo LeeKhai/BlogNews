@@ -28,6 +28,9 @@ Route::get('/getCurrentUser', function () {
 Route::get('/', function () {
     return view('welcome.home.index');
 });
+Route::get('/a', function () {
+    return view('welcome.home.categoryNews');
+});
 Route::group(['namespace' => 'Api\V1', 'as' => 'api.'], function () {
     Route::get('/news/{slug}', 'NewsController@showNews');
 });

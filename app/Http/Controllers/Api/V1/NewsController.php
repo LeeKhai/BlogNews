@@ -9,6 +9,7 @@ use App\News;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use App\Category;
+use App\Tag;
 
 class NewsController extends Controller
 {
@@ -46,10 +47,9 @@ class NewsController extends Controller
     {
         $picture = $request->get('picture');
         $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
-
         Image::make($request->get('picture'))->save(public_path('images/') . $fileName);
 
-        News::create([
+        $news = News::create([
             'name'            => $request->input('name'),
             'description'     => $request->input('description'),
             'slug'            => $request->input('slug'),
@@ -59,6 +59,22 @@ class NewsController extends Controller
             'content'         => $request->input('content'),
             'picture'         => $fileName,
         ]);
+        if ($news) {
+            $arTags = $request->tags;
+            foreach ($arTags as $tag) {
+                $tag1 = Tag::where('name', '=', $tag['name'])->first();
+                if ($tag1 != null) {
+                    $news->tags()->attach($tag['id']);
+                } else {
+                    $tag2 = new Tag();
+                    $tag2->name = $tag['name'];
+                    $tag2->slug = $tag['name'];
+                    $tag2->save();
+                    $tag3 = Tag::where('name',$tag['name'])->first();
+                    $news->tags()->attach($tag3->id);
+                }
+            }
+        }
         return '';
     }
 
@@ -104,7 +120,7 @@ class NewsController extends Controller
         $picture = $request->get('picture');
         $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($picture, 0, strpos($picture, ';')))[1])[1];
         Image::make($request->get('picture'))->save(public_path('images/') . $fileName);
-        
+
         $news = News::findOrFail($id);
         $news->name = $request->input('name');
         $news->description = $request->input('description');

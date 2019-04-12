@@ -54,7 +54,7 @@
                   style="with:100px; height:100px; margin-left:50px;"
                 >
               </div>
-              <div style="width:400px;">
+              <div style="width:400px;" v-if="checkIsPermission">
                 <input type="file" v-on:change="onImageChange" id="picture" class="form-control">
               </div>
               <div style="margin-top:25px; margin-left:300px;width:300px;" v-if="checkIsPermission">

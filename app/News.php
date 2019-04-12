@@ -5,6 +5,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use App\Category;
 use Illuminate\Foundation\Auth\User;
+use App\Tag;
 
 class News extends Model
 {
@@ -41,4 +42,10 @@ class News extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
 }

@@ -65,13 +65,6 @@
     <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
     <script src="{{asset('js/app.js')}}"></script>
 
-    <!-- include VueJS first -->
-    <script src="https://unpkg.com/vue@latest"></script>
-    <!-- use the latest release -->
-    <script src="https://unpkg.com/vue-select@latest"></script>
-    <!-- or point to a specific release -->
-    <script src="https://unpkg.com/vue-select@1.30"></script>
-
 
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

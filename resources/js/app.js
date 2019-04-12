@@ -19,6 +19,8 @@ Vue.config.productionTip = false;
 import CKEditor from '@ckeditor/ckeditor5-vue';
 Vue.use(CKEditor);
 
+import vSelect from 'vue-select'
+
 import Profile from './admin/components/User/proFile'
 import TableUser from './admin/components/User/tableUser'
 import EditUser from './admin/components/User/editUser'
@@ -31,6 +33,9 @@ import CreateCategory from './admin/components/Category/createCategory'
 import TableNews from './admin/components/News/tableNews'
 import EditNews from './admin/components/News/editNews'
 import CreateNews from './admin/components/News/createNews'
+
+
+Vue.component('v-select', vSelect)
 
 const router = new VueRouter({
     base: '/admin',

@@ -56,7 +56,7 @@
               <div v-if="news.picture">
                 <img :src="news.picture" class="img-responsive" height="105" width="115">
               </div>
-                <input type="file" v-on:change="onImageChange">
+              <input type="file" v-on:change="onImageChange">
               <div>
                 <label>Category :</label>
                 <select
@@ -66,12 +66,10 @@
                   style="width:400px;"
                 ></select>
               </div>
-              <!-- <div>
-              <label>Tags :</label>
-                <v-select :options="options"></v-select>
-                <input type="text" value="Amsterdam,Washington" data-role="tagsinput">
-                <input data-role="tagsinput" type="text" name="tags" >
-              </div> -->
+              <div>
+                <label>Tags :</label>
+                <v-select :options="tags" multiple taggable label="name" v-model="news.tags"></v-select>  
+              </div>
               <div style="margin-top:25px; margin-left:300px;width:300px;">
                 <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
               </div>
@@ -85,11 +83,7 @@
 
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-//import selectvue from "./select";
 export default {
-  // components: {
-  //   "v-select": selectvue,
-  // },
   data() {
     return {
       editor: ClassicEditor,
@@ -101,25 +95,14 @@ export default {
         category_id: "",
         picture: "",
         slug: "",
+        tags:[],
       },
-      options: [
-      'foo',
-      'bar',
-      'baz'
-    ]
+      tags:[],
     };
   },
   mounted() {
-    var app = this;
-    axios
-      .get("/api/v1/categories")
-      .then(function(response) {
-        app.list_categories = response.data;
-        app.getSelectCategory("0", "");
-      })
-      .catch(function(response) {
-        console.log("Could not load Categories");
-      });
+    this.getCategories();
+    this.getTags();
   },
   methods: {
     saveForm() {
@@ -161,7 +144,30 @@ export default {
         vm.news.picture = e.target.result;
       };
       reader.readAsDataURL(file);
-    }
+    },
+    getCategories() {
+      var app = this;
+      axios
+        .get("/api/v1/categories")
+        .then(function(response) {
+          app.list_categories = response.data;
+          app.getSelectCategory("0", "");
+        })
+        .catch(function(response) {
+          console.log("Could not load Categories");
+        });
+    },
+    getTags(){
+      var app = this;
+      axios
+        .get("/api/v1/tags")
+        .then(function(response) {
+          app.tags = response.data;
+        })
+        .catch(function(response) {
+          console.log("Could not load Tags");
+        });
+    } 
   }
 };
 </script>

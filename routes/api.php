@@ -21,6 +21,7 @@ Route::group(['prefix' => '/v1', 'namespace' => 'Api\V1', 'as' => 'api.'], funct
     Route::resource('users', 'UserController',['except' => ['create', 'edit']]);
     Route::resource('categories', 'CategoriesController',['except' => ['create', 'edit']]);
     Route::resource('news', 'NewsController',['except' => ['create', 'edit']]);
+    Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
     //Route::get('/news/{id}', 'NewsController@index');
     // Route::get('/edit', 'NewsController@edit')->middleware('can:news.update');
     Route::resource('roles', 'RoleController',['except' => ['create', 'edit']]);
