@@ -47,10 +47,15 @@ class UserController extends Controller
             'password'        => bcrypt($request->input('password')),
             'picture'         => $fileName,
         ]);
-        $name_role = $request->get('role');
-        $user
-            ->roles()
-            ->attach(Role::where('id', $name_role)->first());
+       
+        if ($user) {
+            $arRoles = $request->roles;
+            foreach ($arRoles as $role) {
+                $user
+                ->roles()
+                ->attach(Role::where('name', $role['name'])->first());
+            }    
+        }
         return '';
     }
 

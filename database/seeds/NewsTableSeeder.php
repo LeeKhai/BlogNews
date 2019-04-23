@@ -37,7 +37,7 @@ class NewsTableSeeder extends Seeder
 	            'published' => rand(0,1),
                 'user_id' => $author1->id,
                 'picture' => 'abc.png',
-                'category_id' => 1,
+                'category_id' => rand(0,3),
 	        ]);
 	        $title = $faker->unique()->sentence($nbWords = 6, $variableNbWords = true);
         	$news = News::create([
@@ -48,7 +48,7 @@ class NewsTableSeeder extends Seeder
 	            'published' => rand(0,1),
                 'user_id' => $author2->id,
                 'picture' => 'abc.png',
-                'category_id' => 1,
+                'category_id' => rand(0,3),
 	        ]);
         }
     }

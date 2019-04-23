@@ -70,7 +70,7 @@
                 <label>Tags :</label>
                 <v-select :options="tags" multiple taggable label="name" v-model="news.tags"></v-select>  
               </div>
-              <div style="margin-top:25px; margin-left:300px;width:300px;">
+              <div style="margin-top:25px; margin-left:300px; width:300px;">
                 <button class="btn btn-primary btn-user btn-block" style="submit">Submit</button>
               </div>
             </form>

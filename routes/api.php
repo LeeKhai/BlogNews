@@ -18,11 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => '/v1', 'namespace' => 'Api\V1', 'as' => 'api.'], function () {
-    Route::resource('users', 'UserController',['except' => ['create', 'edit']]);
-    Route::resource('categories', 'CategoriesController',['except' => ['create', 'edit']]);
+    Route::resource('users', 'UserController');
+    Route::resource('categories', 'CategoriesController');
     Route::resource('news', 'NewsController',['except' => ['create', 'edit']]);
     Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
-    //Route::get('/news/{id}', 'NewsController@index');
-    // Route::get('/edit', 'NewsController@edit')->middleware('can:news.update');
     Route::resource('roles', 'RoleController',['except' => ['create', 'edit']]);
 });

@@ -48,18 +48,19 @@
                   v-model="user.email"
                 >
               </div>
-              <label>Role:</label>
-              <select id="selectRole" v-model="user.role">
-              </select>
-              <div style="width:400px;">
-                <label>Avatar:</label>
-                <input type="file" v-on:change="onImageChange" id="picture" class="form-control">
+              <div>
+                <label>Roles :</label>
+                <v-select :options="roles" multiple label="name" v-model="user.roles" ></v-select>
               </div>
               <div v-if="user.picture">
+                <label>Avatar:</label>
                 <img :src="user.picture" class="img-responsive" height="105" width="115">
               </div>
+              <div style="width:400px;">
+                <input type="file" v-on:change="onImageChange">
+              </div>
               <div style="margin-top:25px; margin-left:300px;width:300px;">
-              <button class="btn btn-primary btn-user btn-block" style="submit">Create</button>
+                <button class="btn btn-primary btn-user btn-block" style="submit">Create</button>
               </div>
             </form>
           </div>
@@ -73,14 +74,14 @@
 export default {
   data() {
     return {
-      list_role:[],
       user: {
         name: "",
         email: "",
         password: "",
         picture: "",
-        role:"",
-      }
+        roles: [],
+      },
+      roles: [],
     };
   },
   mounted() {
@@ -88,8 +89,7 @@ export default {
     axios
       .get("/api/v1/roles")
       .then(function(response) {
-        app.list_role = response.data;  
-        app.getSelectRole();     
+        app.roles = response.data;
       })
       .catch(function(response) {
         console.log("Could not load Role");
@@ -123,17 +123,6 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    getSelectRole(){
-      var app = this;
-      var x = document.getElementById("selectRole");
-      var option;
-      app.list_role.forEach(function(item){
-          option = document.createElement("option");
-          option.text = item.name;
-          option.value = item.id;
-          x.add(option);
-      }); 
-    }
   }
 };
 </script>
@@ -148,19 +137,19 @@ export default {
 }
 
 #selectRole {
-    display: block;
-    width: 100%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #6e707e;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #d1d3e2;
-    border-radius: 12px;
-    margin-top: 15px;
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6e707e;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #d1d3e2;
+  border-radius: 12px;
+  margin-top: 15px;
 }
 </style>
 

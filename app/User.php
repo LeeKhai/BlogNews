@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Role;
 use App\News;
-
+use App\Comment;
 
 
 class User extends Authenticatable
@@ -69,6 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(News::class);
     }
-
-   
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

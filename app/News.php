@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Category;
 use Illuminate\Foundation\Auth\User;
 use App\Tag;
+use App\Comment;
 
 class News extends Model
 {
@@ -48,4 +49,8 @@ class News extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -110,7 +110,7 @@ $news_lastes = News::where('published', 1)
 				?>
 				<div class="category_layout">
 					<div class="item_caregory red">
-						<h2><a href="category.html">{{ $category_parent->name }}</a></h2>
+						<h2><a href="/news/category/{{ $category_parent->id}}">{{ $category_parent->name }}</a></h2>
 					</div>
 					<div class="row">
 						<div class="col-md-7">

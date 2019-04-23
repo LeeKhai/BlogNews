@@ -2660,24 +2660,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      list_role: [],
       user: {
         name: "",
         email: "",
         password: "",
         picture: "",
-        role: ""
-      }
+        roles: []
+      },
+      roles: []
     };
   },
   mounted: function mounted() {
     var app = this;
     axios.get("/api/v1/roles").then(function (response) {
-      app.list_role = response.data;
-      app.getSelectRole();
+      app.roles = response.data;
     }).catch(function (response) {
       console.log("Could not load Role");
     });
@@ -2710,17 +2710,6 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       reader.readAsDataURL(file);
-    },
-    getSelectRole: function getSelectRole() {
-      var app = this;
-      var x = document.getElementById("selectRole");
-      var option;
-      app.list_role.forEach(function (item) {
-        option = document.createElement("option");
-        option.text = item.name;
-        option.value = item.id;
-        x.add(option);
-      });
     }
   }
 });
@@ -7781,7 +7770,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.url[data-v-5d5a8660] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\n#selectRole[data-v-5d5a8660] {\r\n    display: block;\r\n    width: 100%;\r\n    height: calc(1.5em + .75rem + 2px);\r\n    padding: .375rem .75rem;\r\n    font-size: 1rem;\r\n    font-weight: 400;\r\n    line-height: 1.5;\r\n    color: #6e707e;\r\n    background-color: #fff;\r\n    background-clip: padding-box;\r\n    border: 1px solid #d1d3e2;\r\n    border-radius: 12px;\r\n    margin-top: 15px;\n}\r\n", ""]);
+exports.push([module.i, "\n.url[data-v-5d5a8660] {\r\n  color: blue;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  margin-left: 10px;\r\n  margin-top: 10px;\n}\n#selectRole[data-v-5d5a8660] {\r\n  display: block;\r\n  width: 100%;\r\n  height: calc(1.5em + 0.75rem + 2px);\r\n  padding: 0.375rem 0.75rem;\r\n  font-size: 1rem;\r\n  font-weight: 400;\r\n  line-height: 1.5;\r\n  color: #6e707e;\r\n  background-color: #fff;\r\n  background-clip: padding-box;\r\n  border: 1px solid #d1d3e2;\r\n  border-radius: 12px;\r\n  margin-top: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -40946,51 +40935,33 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c("label", [_vm._v("Role:")]),
-                _vm._v(" "),
-                _c("select", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.user.role,
-                      expression: "user.role"
-                    }
+                _c(
+                  "div",
+                  [
+                    _c("label", [_vm._v("Roles :")]),
+                    _vm._v(" "),
+                    _c("v-select", {
+                      attrs: {
+                        options: _vm.roles,
+                        multiple: "",
+                        label: "name"
+                      },
+                      model: {
+                        value: _vm.user.roles,
+                        callback: function($$v) {
+                          _vm.$set(_vm.user, "roles", $$v)
+                        },
+                        expression: "user.roles"
+                      }
+                    })
                   ],
-                  attrs: { id: "selectRole" },
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.user,
-                        "role",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("div", { staticStyle: { width: "400px" } }, [
-                  _c("label", [_vm._v("Avatar:")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "file", id: "picture" },
-                    on: { change: _vm.onImageChange }
-                  })
-                ]),
+                  1
+                ),
                 _vm._v(" "),
                 _vm.user.picture
                   ? _c("div", [
+                      _c("label", [_vm._v("Avatar:")]),
+                      _vm._v(" "),
                       _c("img", {
                         staticClass: "img-responsive",
                         attrs: {
@@ -41001,6 +40972,13 @@ var render = function() {
                       })
                     ])
                   : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticStyle: { width: "400px" } }, [
+                  _c("input", {
+                    attrs: { type: "file" },
+                    on: { change: _vm.onImageChange }
+                  })
+                ]),
                 _vm._v(" "),
                 _vm._m(1)
               ]

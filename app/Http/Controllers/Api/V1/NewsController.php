@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use App\Category;
 use App\Tag;
+use App\Comment;
 
 class NewsController extends Controller
 {
@@ -93,9 +94,27 @@ class NewsController extends Controller
 
     public function showNews($slug)
     {
-        $news = News::where('slug', $slug);
-        return view('welcome.home.single', compact('news'));
+        $news = News::where('slug', $slug)->first();
+        $comments = $news->comments()->get();
+        return view('welcome.home.single', compact('news','comments'));
     }
+
+    public function showNewsCategory($id)
+    {
+        $category = Category::with('news')->where('id', $id)->first();
+        $list_news = $category->news()->get();
+        return view('welcome.home.categoryNews', compact('category','list_news'));
+       
+    }
+
+    public function search()
+    {
+        $search = \Request::get('search');
+        $list_news = News::where('name', 'like', '%' . $search . '%')->orderBy('name')->paginate(10);
+        return view('welcome.home.search', compact('list_news','search'));
+    }
+
+   
 
     /**
      * Show the form for editing the specified resource.
